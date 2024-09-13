@@ -1,0 +1,11 @@
+covid_etl_dbt:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: postgres  # PostgreSQL host
+      user: airflow   # DBT will use this user to connect
+      password: airflow  # PostgreSQL password
+      dbname: airflow   # DBT will interact with this database
+      schema: public    # The schema where the tables will be created
+      port: 5432

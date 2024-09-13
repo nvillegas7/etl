@@ -9,7 +9,7 @@ from tasks.loader import loader
 
 # Define the DAG for the ETL pipeline
 with DAG(
-    dag_id='etl_pipeline_dag',
+    dag_id='ingest',
     start_date=datetime(2023, 9, 1),
     schedule_interval='@daily',
     catchup=False
