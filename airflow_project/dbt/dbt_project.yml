@@ -1,0 +1,30 @@
+name: 'covid_etl_dbt'
+version: '1.0.0'
+
+
+profile: 'profiles'  
+
+source-paths: ["models"]
+target-path: "target"
+clean-targets:
+  - "target"
+
+# Models configuration
+models:
+  covid_etl_dbt:  # This refers to the project name
+    staging:  # Example for staging models
+      materialized: view  # You can use 'view', 'table', or 'incremental'
+    marts:  # Example for final data marts
+      materialized: table
+
+# Data tests and seeds
+tests-paths: ["tests"]
+seeds:
+  covid_etl_dbt:
+    enabled: true  # You can set up static seed data for testing
+
+# Macro paths
+macro-paths: ["macros"]
+
+# Full Refresh option
+full-refresh: false

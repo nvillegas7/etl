@@ -1,4 +1,0 @@
-load_from:
-  - python_file:
-      relative_path: "repositories/my_repository.py"
-      location_name: "my_repository"
