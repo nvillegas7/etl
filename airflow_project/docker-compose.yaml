@@ -65,5 +65,19 @@ services:
     command: ["bash"]
     working_dir: /usr/app
 
+  # Test service
+  # airflow-tests:
+  #   build: .
+  #   image: custom-airflow:latest
+  #   command: ["python", "-m", "unittest", "discover", "-s", "tests"]
+  #   environment:
+  #     - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+  #   volumes:
+  #     - ./tests:/opt/airflow/tests
+  #     - ./tasks:/opt/airflow/tasks
+  #   depends_on:
+  #     - postgres
+  #   entrypoint: ["/bin/bash", "-c", "sleep 10 && python -m unittest discover -s tests"]
+
 volumes:
   postgres_data:

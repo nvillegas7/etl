@@ -14,7 +14,7 @@ default_args = {
 
 # Define the DAG
 with DAG(
-    'dbt_run_dag',
+    'tranform',
     default_args=default_args,
     description='Run DBT transformations as part of the COVID-19 ETL',
     schedule_interval='@daily',  # Set your desired schedule
