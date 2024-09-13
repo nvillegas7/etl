@@ -1,0 +1,65 @@
+[2024-09-07T16:11:26.197+0000] {taskinstance.py:1087} INFO - Dependencies all met for <TaskInstance: covid_data_ingestion_dag.ingest_covid_data manual__2024-09-07T16:11:25.500328+00:00 [queued]>
+[2024-09-07T16:11:26.203+0000] {taskinstance.py:1087} INFO - Dependencies all met for <TaskInstance: covid_data_ingestion_dag.ingest_covid_data manual__2024-09-07T16:11:25.500328+00:00 [queued]>
+[2024-09-07T16:11:26.203+0000] {taskinstance.py:1283} INFO - 
+--------------------------------------------------------------------------------
+[2024-09-07T16:11:26.203+0000] {taskinstance.py:1284} INFO - Starting attempt 1 of 1
+[2024-09-07T16:11:26.203+0000] {taskinstance.py:1285} INFO - 
+--------------------------------------------------------------------------------
+[2024-09-07T16:11:26.210+0000] {taskinstance.py:1304} INFO - Executing <Task(PythonOperator): ingest_covid_data> on 2024-09-07 16:11:25.500328+00:00
+[2024-09-07T16:11:26.213+0000] {standard_task_runner.py:55} INFO - Started process 178 to run task
+[2024-09-07T16:11:26.215+0000] {standard_task_runner.py:82} INFO - Running: ['***', 'tasks', 'run', 'covid_data_ingestion_dag', 'ingest_covid_data', 'manual__2024-09-07T16:11:25.500328+00:00', '--job-id', '7', '--raw', '--subdir', 'DAGS_FOLDER/my_dags.py', '--cfg-path', '/tmp/tmp28py45cd']
+[2024-09-07T16:11:26.217+0000] {standard_task_runner.py:83} INFO - Job 7: Subtask ingest_covid_data
+[2024-09-07T16:11:26.227+0000] {logging_mixin.py:137} WARNING - /home/***/.local/lib/python3.7/site-packages/***/settings.py:249 DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+[2024-09-07T16:11:26.263+0000] {task_command.py:389} INFO - Running <TaskInstance: covid_data_ingestion_dag.ingest_covid_data manual__2024-09-07T16:11:25.500328+00:00 [running]> on host 3e9895e193d8
+[2024-09-07T16:11:26.432+0000] {taskinstance.py:1513} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_OWNER=***
+AIRFLOW_CTX_DAG_ID=covid_data_ingestion_dag
+AIRFLOW_CTX_TASK_ID=ingest_covid_data
+AIRFLOW_CTX_EXECUTION_DATE=2024-09-07T16:11:25.500328+00:00
+AIRFLOW_CTX_TRY_NUMBER=1
+AIRFLOW_CTX_DAG_RUN_ID=manual__2024-09-07T16:11:25.500328+00:00
+[2024-09-07T16:11:26.802+0000] {taskinstance.py:1772} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/operators/python.py", line 175, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/operators/python.py", line 192, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/my_dags.py", line 13, in ingest_covid_data
+    data = pd.read_csv(url)
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/util/_decorators.py", line 311, in wrapper
+    return func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/io/parsers/readers.py", line 586, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/io/parsers/readers.py", line 482, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/io/parsers/readers.py", line 811, in __init__
+    self._engine = self._make_engine(self.engine)
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/io/parsers/readers.py", line 1040, in _make_engine
+    return mapping[engine](self.f, **self.options)  # type: ignore[call-arg]
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/io/parsers/c_parser_wrapper.py", line 51, in __init__
+    self._open_handles(src, kwds)
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/io/parsers/base_parser.py", line 229, in _open_handles
+    errors=kwds.get("encoding_errors", "strict"),
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/io/common.py", line 614, in get_handle
+    storage_options=storage_options,
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/io/common.py", line 312, in _get_filepath_or_buffer
+    with urlopen(req_info) as req:
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/io/common.py", line 212, in urlopen
+    return urllib.request.urlopen(*args, **kwargs)
+  File "/usr/local/lib/python3.7/urllib/request.py", line 222, in urlopen
+    return opener.open(url, data, timeout)
+  File "/usr/local/lib/python3.7/urllib/request.py", line 531, in open
+    response = meth(req, response)
+  File "/usr/local/lib/python3.7/urllib/request.py", line 641, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "/usr/local/lib/python3.7/urllib/request.py", line 569, in error
+    return self._call_chain(*args)
+  File "/usr/local/lib/python3.7/urllib/request.py", line 503, in _call_chain
+    result = func(*args)
+  File "/usr/local/lib/python3.7/urllib/request.py", line 649, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 404: Not Found
+[2024-09-07T16:11:26.827+0000] {taskinstance.py:1327} INFO - Marking task as FAILED. dag_id=covid_data_ingestion_dag, task_id=ingest_covid_data, execution_date=20240907T161125, start_date=20240907T161126, end_date=20240907T161126
+[2024-09-07T16:11:26.846+0000] {standard_task_runner.py:105} ERROR - Failed to execute job 7 for task ingest_covid_data (HTTP Error 404: Not Found; 178)
+[2024-09-07T16:11:26.876+0000] {local_task_job.py:159} INFO - Task exited with return code 1
+[2024-09-07T16:11:26.891+0000] {taskinstance.py:2582} INFO - 0 downstream tasks scheduled from follow-on schedule check

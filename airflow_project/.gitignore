@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Airflow logs and temporary files
+logs/
+tmp/
+airflow.db
+*.pid
+*.log
+
+# Environment files
+.env
+.env.*
+.vscode/
+.idea/
+
+# Docker
+*.log
+docker-compose.override.yml
+docker-compose.override.yaml
+docker-compose*.yml
+docker-compose*.yaml
+docker-compose*.env
+docker-compose*.override.yml
+docker-compose*.override.yaml
+docker-compose.override.yml
+
+# Postgres data
+postgres_data/
+pgdata/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Byte-compiled and cached files
+*.log
+*.cache
+*.bak
+*.swp
+*.tmp
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env.bak/
+env/
+*.env
+
+# OS generated files
+.DS_Store
+Thumbs.db

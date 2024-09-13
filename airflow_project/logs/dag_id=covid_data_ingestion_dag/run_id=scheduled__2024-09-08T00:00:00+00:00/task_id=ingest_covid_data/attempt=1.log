@@ -1,0 +1,38 @@
+[2024-09-09T00:04:20.798+0000] {taskinstance.py:1087} INFO - Dependencies all met for <TaskInstance: covid_data_ingestion_dag.ingest_covid_data scheduled__2024-09-08T00:00:00+00:00 [queued]>
+[2024-09-09T00:04:20.803+0000] {taskinstance.py:1087} INFO - Dependencies all met for <TaskInstance: covid_data_ingestion_dag.ingest_covid_data scheduled__2024-09-08T00:00:00+00:00 [queued]>
+[2024-09-09T00:04:20.804+0000] {taskinstance.py:1283} INFO - 
+--------------------------------------------------------------------------------
+[2024-09-09T00:04:20.804+0000] {taskinstance.py:1284} INFO - Starting attempt 1 of 1
+[2024-09-09T00:04:20.804+0000] {taskinstance.py:1285} INFO - 
+--------------------------------------------------------------------------------
+[2024-09-09T00:04:20.812+0000] {taskinstance.py:1304} INFO - Executing <Task(PythonOperator): ingest_covid_data> on 2024-09-08 00:00:00+00:00
+[2024-09-09T00:04:20.815+0000] {standard_task_runner.py:55} INFO - Started process 2968 to run task
+[2024-09-09T00:04:20.817+0000] {standard_task_runner.py:82} INFO - Running: ['***', 'tasks', 'run', 'covid_data_ingestion_dag', 'ingest_covid_data', 'scheduled__2024-09-08T00:00:00+00:00', '--job-id', '9', '--raw', '--subdir', 'DAGS_FOLDER/data_ingestion.py', '--cfg-path', '/tmp/tmpnwpt6iyx']
+[2024-09-09T00:04:20.819+0000] {standard_task_runner.py:83} INFO - Job 9: Subtask ingest_covid_data
+[2024-09-09T00:04:20.830+0000] {logging_mixin.py:137} WARNING - /home/***/.local/lib/python3.7/site-packages/***/settings.py:249 DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+[2024-09-09T00:04:20.844+0000] {logging_mixin.py:137} WARNING - /home/***/.local/lib/python3.7/site-packages/***/utils/sqlalchemy.py:121 DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+[2024-09-09T00:04:20.865+0000] {task_command.py:389} INFO - Running <TaskInstance: covid_data_ingestion_dag.ingest_covid_data scheduled__2024-09-08T00:00:00+00:00 [running]> on host 3e9895e193d8
+[2024-09-09T00:04:21.064+0000] {taskinstance.py:1513} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_OWNER=***
+AIRFLOW_CTX_DAG_ID=covid_data_ingestion_dag
+AIRFLOW_CTX_TASK_ID=ingest_covid_data
+AIRFLOW_CTX_EXECUTION_DATE=2024-09-08T00:00:00+00:00
+AIRFLOW_CTX_TRY_NUMBER=1
+AIRFLOW_CTX_DAG_RUN_ID=scheduled__2024-09-08T00:00:00+00:00
+[2024-09-09T00:04:21.109+0000] {logging_mixin.py:137} WARNING - /home/***/.local/lib/python3.7/site-packages/urllib3/connectionpool.py:1052 InsecureRequestWarning: Unverified HTTPS request is being made to host 'raw.githubusercontent.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/1.26.x/advanced-usage.html#ssl-warnings
+[2024-09-09T00:04:21.376+0000] {logging_mixin.py:137} INFO - Failed to fetch data: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/09-07-2024.csv
+[2024-09-09T00:04:21.377+0000] {taskinstance.py:1772} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/operators/python.py", line 175, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/operators/python.py", line 192, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/data_ingestion.py", line 15, in ingest_covid_data
+    response.raise_for_status()  # Raise an exception for HTTP errors
+  File "/home/airflow/.local/lib/python3.7/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/09-07-2024.csv
+[2024-09-09T00:04:21.385+0000] {taskinstance.py:1327} INFO - Marking task as FAILED. dag_id=covid_data_ingestion_dag, task_id=ingest_covid_data, execution_date=20240908T000000, start_date=20240909T000420, end_date=20240909T000421
+[2024-09-09T00:04:21.394+0000] {standard_task_runner.py:105} ERROR - Failed to execute job 9 for task ingest_covid_data (404 Client Error: Not Found for url: https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/09-07-2024.csv; 2968)
+[2024-09-09T00:04:21.435+0000] {local_task_job.py:159} INFO - Task exited with return code 1
+[2024-09-09T00:04:21.466+0000] {taskinstance.py:2582} INFO - 0 downstream tasks scheduled from follow-on schedule check

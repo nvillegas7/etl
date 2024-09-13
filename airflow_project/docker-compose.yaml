@@ -1,0 +1,69 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  airflow-scheduler:
+    image: apache/airflow:2.5.0
+    restart: always
+    command: ["airflow", "scheduler"]
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+      - AIRFLOW__WEBSERVER__SECRET_KEY=e9ef26fad59750bb17bdae9f1a8a3522
+      - PYTHONPATH=/opt/airflow/
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./tasks:/opt/airflow/tasks
+    depends_on:
+      - postgres
+
+  airflow-webserver:
+    image: apache/airflow:2.5.0
+    restart: always
+    command: ["airflow", "webserver"]
+    ports:
+      - "8081:8080"
+    depends_on:
+      - airflow-scheduler
+    environment:
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+      - AIRFLOW__WEBSERVER__SECRET_KEY=e9ef26fad59750bb17bdae9f1a8a3522
+      - PYTHONPATH=/opt/airflow/
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./tasks:/opt/airflow/tasks
+
+  airflow-init:
+    image: apache/airflow:2.5.0
+    command: ["airflow", "db", "init"]
+    environment:
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+      - AIRFLOW__WEBSERVER__SECRET_KEY=e9ef26fad59750bb17bdae9f1a8a3522
+      - PYTHONPATH=/opt/airflow/
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./tasks:/opt/airflow/tasks
+    depends_on:
+      - postgres
+
+  dbt:
+    image: fishtownanalytics/dbt:0.21.0
+    volumes:
+      - ./dbt:/usr/app
+    command: ["bash"]
+    working_dir: /usr/app
+
+volumes:
+  postgres_data:

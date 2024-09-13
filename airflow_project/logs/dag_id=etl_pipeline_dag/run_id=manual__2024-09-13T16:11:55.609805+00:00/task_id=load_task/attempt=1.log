@@ -1,0 +1,48 @@
+[2024-09-13T16:11:59.828+0000] {taskinstance.py:1087} INFO - Dependencies all met for <TaskInstance: etl_pipeline_dag.load_task manual__2024-09-13T16:11:55.609805+00:00 [queued]>
+[2024-09-13T16:11:59.835+0000] {taskinstance.py:1087} INFO - Dependencies all met for <TaskInstance: etl_pipeline_dag.load_task manual__2024-09-13T16:11:55.609805+00:00 [queued]>
+[2024-09-13T16:11:59.836+0000] {taskinstance.py:1283} INFO - 
+--------------------------------------------------------------------------------
+[2024-09-13T16:11:59.836+0000] {taskinstance.py:1284} INFO - Starting attempt 1 of 1
+[2024-09-13T16:11:59.836+0000] {taskinstance.py:1285} INFO - 
+--------------------------------------------------------------------------------
+[2024-09-13T16:11:59.990+0000] {taskinstance.py:1304} INFO - Executing <Task(PythonOperator): load_task> on 2024-09-13 16:11:55.609805+00:00
+[2024-09-13T16:12:00.001+0000] {standard_task_runner.py:55} INFO - Started process 476 to run task
+[2024-09-13T16:12:00.002+0000] {standard_task_runner.py:82} INFO - Running: ['***', 'tasks', 'run', 'etl_pipeline_dag', 'load_task', 'manual__2024-09-13T16:11:55.609805+00:00', '--job-id', '46', '--raw', '--subdir', 'DAGS_FOLDER/etl_pipeline.py', '--cfg-path', '/tmp/tmpqf3g4ug4']
+[2024-09-13T16:12:00.005+0000] {standard_task_runner.py:83} INFO - Job 46: Subtask load_task
+[2024-09-13T16:12:00.026+0000] {logging_mixin.py:137} WARNING - /home/***/.local/lib/python3.7/site-packages/***/settings.py:249 DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+[2024-09-13T16:12:00.079+0000] {task_command.py:389} INFO - Running <TaskInstance: etl_pipeline_dag.load_task manual__2024-09-13T16:11:55.609805+00:00 [running]> on host 2656b950921d
+[2024-09-13T16:12:00.231+0000] {taskinstance.py:1513} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_OWNER=***
+AIRFLOW_CTX_DAG_ID=etl_pipeline_dag
+AIRFLOW_CTX_TASK_ID=load_task
+AIRFLOW_CTX_EXECUTION_DATE=2024-09-13T16:11:55.609805+00:00
+AIRFLOW_CTX_TRY_NUMBER=1
+AIRFLOW_CTX_DAG_RUN_ID=manual__2024-09-13T16:11:55.609805+00:00
+[2024-09-13T16:12:00.236+0000] {logging_mixin.py:137} INFO - Failed to load data into PostgreSQL: Expected object or value
+[2024-09-13T16:12:00.236+0000] {taskinstance.py:1772} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/operators/python.py", line 175, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/operators/python.py", line 192, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/tasks/loader.py", line 9, in loader
+    data = pd.read_json(parsed_data_json)
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/util/_decorators.py", line 207, in wrapper
+    return func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/util/_decorators.py", line 311, in wrapper
+    return func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/io/json/_json.py", line 614, in read_json
+    return json_reader.read()
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/io/json/_json.py", line 748, in read
+    obj = self._get_object_parser(self.data)
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/io/json/_json.py", line 770, in _get_object_parser
+    obj = FrameParser(json, **kwargs).parse()
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/io/json/_json.py", line 885, in parse
+    self._parse_no_numpy()
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/io/json/_json.py", line 1140, in _parse_no_numpy
+    loads(json, precise_float=self.precise_float), dtype=None
+ValueError: Expected object or value
+[2024-09-13T16:12:00.243+0000] {taskinstance.py:1327} INFO - Marking task as FAILED. dag_id=etl_pipeline_dag, task_id=load_task, execution_date=20240913T161155, start_date=20240913T161159, end_date=20240913T161200
+[2024-09-13T16:12:00.251+0000] {standard_task_runner.py:105} ERROR - Failed to execute job 46 for task load_task (Expected object or value; 476)
+[2024-09-13T16:12:00.263+0000] {local_task_job.py:159} INFO - Task exited with return code 1
+[2024-09-13T16:12:00.278+0000] {taskinstance.py:2582} INFO - 0 downstream tasks scheduled from follow-on schedule check

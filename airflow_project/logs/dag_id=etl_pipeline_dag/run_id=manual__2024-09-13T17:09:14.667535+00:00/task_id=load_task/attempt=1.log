@@ -1,0 +1,34 @@
+[2024-09-13T17:09:18.557+0000] {taskinstance.py:1087} INFO - Dependencies all met for <TaskInstance: etl_pipeline_dag.load_task manual__2024-09-13T17:09:14.667535+00:00 [queued]>
+[2024-09-13T17:09:18.564+0000] {taskinstance.py:1087} INFO - Dependencies all met for <TaskInstance: etl_pipeline_dag.load_task manual__2024-09-13T17:09:14.667535+00:00 [queued]>
+[2024-09-13T17:09:18.564+0000] {taskinstance.py:1283} INFO - 
+--------------------------------------------------------------------------------
+[2024-09-13T17:09:18.564+0000] {taskinstance.py:1284} INFO - Starting attempt 1 of 1
+[2024-09-13T17:09:18.564+0000] {taskinstance.py:1285} INFO - 
+--------------------------------------------------------------------------------
+[2024-09-13T17:09:18.573+0000] {taskinstance.py:1304} INFO - Executing <Task(PythonOperator): load_task> on 2024-09-13 17:09:14.667535+00:00
+[2024-09-13T17:09:18.577+0000] {standard_task_runner.py:55} INFO - Started process 1948 to run task
+[2024-09-13T17:09:18.581+0000] {standard_task_runner.py:82} INFO - Running: ['***', 'tasks', 'run', 'etl_pipeline_dag', 'load_task', 'manual__2024-09-13T17:09:14.667535+00:00', '--job-id', '88', '--raw', '--subdir', 'DAGS_FOLDER/etl_pipeline.py', '--cfg-path', '/tmp/tmpppft0zlq']
+[2024-09-13T17:09:18.691+0000] {standard_task_runner.py:83} INFO - Job 88: Subtask load_task
+[2024-09-13T17:09:18.704+0000] {logging_mixin.py:137} WARNING - /home/***/.local/lib/python3.7/site-packages/***/settings.py:249 DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+[2024-09-13T17:09:18.738+0000] {task_command.py:389} INFO - Running <TaskInstance: etl_pipeline_dag.load_task manual__2024-09-13T17:09:14.667535+00:00 [running]> on host 2656b950921d
+[2024-09-13T17:09:18.863+0000] {taskinstance.py:1513} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_OWNER=***
+AIRFLOW_CTX_DAG_ID=etl_pipeline_dag
+AIRFLOW_CTX_TASK_ID=load_task
+AIRFLOW_CTX_EXECUTION_DATE=2024-09-13T17:09:14.667535+00:00
+AIRFLOW_CTX_TRY_NUMBER=1
+AIRFLOW_CTX_DAG_RUN_ID=manual__2024-09-13T17:09:14.667535+00:00
+[2024-09-13T17:09:18.877+0000] {logging_mixin.py:137} INFO - Failed to load data into PostgreSQL: float() argument must be a string or a number, not 'NoneType'
+[2024-09-13T17:09:18.878+0000] {taskinstance.py:1772} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/operators/python.py", line 175, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/operators/python.py", line 192, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/tasks/loader.py", line 41, in loader
+    float(row.get('incident_rate')) if row.get('incident_rate') != '' else None,  # Handle numeric columns
+TypeError: float() argument must be a string or a number, not 'NoneType'
+[2024-09-13T17:09:18.886+0000] {taskinstance.py:1327} INFO - Marking task as FAILED. dag_id=etl_pipeline_dag, task_id=load_task, execution_date=20240913T170914, start_date=20240913T170918, end_date=20240913T170918
+[2024-09-13T17:09:18.896+0000] {standard_task_runner.py:105} ERROR - Failed to execute job 88 for task load_task (float() argument must be a string or a number, not 'NoneType'; 1948)
+[2024-09-13T17:09:18.914+0000] {local_task_job.py:159} INFO - Task exited with return code 1
+[2024-09-13T17:09:19.024+0000] {taskinstance.py:2582} INFO - 0 downstream tasks scheduled from follow-on schedule check
