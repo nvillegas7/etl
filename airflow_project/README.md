@@ -1,6 +1,6 @@
 # Data ETL Pipeline with Airflow
 
-This project sets up an **ETL (Extract, Transform, Load)** pipeline for ingesting COVID-19 data from an external source (currently supports HTTP), transforming the data to handle missing values, and loading it into a PostgreSQL database. The pipeline is orchestrated using **Apache Airflow**.
+This project sets up an **ETL (Extract, Transform, Load)** pipeline for ingesting data from an external source (currently supports HTTP), transforming the data to handle missing values, and loading it into a PostgreSQL database. The pipeline is orchestrated using **Apache Airflow**.
 
 ## Project Structure
 
@@ -45,7 +45,7 @@ Basic understanding of Python and Airflow concepts.
     ```
 
 4. Access the web interface:
-    Open your web browser and go to [http://localhost:8081](http://localhost:8081) to access the Toy Robot interface.
+    Open your web browser and go to [http://localhost:8081](http://localhost:8081) to access the Airflow interface.
 
 The default credentials are:
 Username: airflow
@@ -61,7 +61,7 @@ postgres_connection: Connection string for your PostgreSQL database.
 The ETL pipeline consists of the following tasks:
 
 ### Extractor:
-Extracts the raw data from the COVID-19 data source (e.g., Johns Hopkins CSSEGISandData/COVID-19).
+Extracts the raw data from the http data source.
 Fetches the daily reports and handles both flat and nested CSV file structures.
 
 ### Parser:

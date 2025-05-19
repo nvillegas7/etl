@@ -1,54 +1,101 @@
 import json
+import os
+import ast
 import psycopg2
+from psycopg2.extras import Json
+from datetime import datetime
+from json import JSONDecodeError
 
-def loader(parsed_data_json):
-    try:
-        # Connect to PostgreSQL
-        conn = psycopg2.connect(
-            host="postgres",
-            database="airflow",
-            user="airflow",
-            password="airflow"
+def loader(parsed_data, table_name: str = "odds", db_config: dict = None):
+    """
+    Generic loader: parsed_data can be
+      - a JSON string (double-quoted) representing a list of dicts
+      - a Python repr string (single-quoted) representing a list/dict
+      - a native Python list of dicts
+      - a native Python dict (will be wrapped into a list)
+    """
+    # 1) normalize rows into a Python list
+    print(parsed_data)
+    if isinstance(parsed_data, str):
+        try:
+            rows = json.loads(parsed_data)
+        except JSONDecodeError:
+            try:
+                rows = ast.literal_eval(parsed_data)
+            except (ValueError, SyntaxError) as e:
+                raise ValueError(
+                    "Could not parse `parsed_data` as JSON or Python literal"
+                ) from e
+    elif isinstance(parsed_data, dict):
+        rows = [parsed_data]
+    elif isinstance(parsed_data, list):
+        rows = parsed_data
+    else:
+        raise ValueError(
+            f"`parsed_data` must be JSON str, repr str, dict, or list; got {type(parsed_data)}"
         )
-        cursor = conn.cursor()
 
-        # Insert each row (dictionary) into the database
-        for row in json.loads(parsed_data_json):
-            # Convert the additional data to a JSON string
-            additional_data = {k: v for k, v in row.items() if k not in [
-                'Province_State', 'Country_Region', 'Lat', 'Long_', 'Confirmed', 
-                'Deaths', 'Recovered', 'Active', 'Incident_Rate', 'Case_Fatality_Ratio', 'Last_Update'
-            ]}
-            additional_data_json = json.dumps(additional_data)
+    # 2) DB connection setup
+    default_config = {
+        "host":     os.environ.get("PG_HOST", "postgres"),
+        "database": os.environ.get("PG_DATABASE", "airflow"),
+        "user":     os.environ.get("PG_USER", "airflow"),
+        "password": os.environ.get("PG_PASSWORD", "airflow"),
+        "port":     os.environ.get("PG_PORT", 5432),
+    }
+    cfg = db_config or default_config
 
-            # Replace empty strings with None for numeric columns
-            cursor.execute("""
-                INSERT INTO covid_raw_data (
-                    province_state, country_region, lat, long, Confirmed, Deaths, Recovered, Active, 
-                    Incident_Rate, Case_Fatality_Ratio, last_update, additional_data
-                )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb)
-            """, (
-                row.get('Province_State', 'N/A'), 
-                row.get('Country_Region', 'N/A'),
-                float(row.get('Lat')) if row.get('Lat') != '' else None,  # Handle numeric columns
-                float(row.get('Long_')) if row.get('Long_') != '' else None,  # Handle numeric columns
-                int(row.get('Confirmed', 0)), 
-                int(row.get('Deaths', 0)),
-                int(row.get('Recovered', 0)), 
-                int(row.get('Active', 0)),
-                float(row.get('Incident_Rate', 0)),
-                float(row.get('Case_Fatality_Ratio', 0)),
-                row.get('Last_Update', None), 
-                additional_data_json  # Pass the JSON string to PostgreSQL
-            ))
+    conn = psycopg2.connect(
+        host=cfg["host"],
+        database=cfg["database"],
+        user=cfg["user"],
+        password=cfg["password"],
+        port=cfg.get("port", 5432)
+    )
+
+    try:
+        # 3) Actual translation of rows into SQL inserts
+        cur = conn.cursor()
+        now = datetime.now()
+
+        print(rows)
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+
+            # normalize team names for easy lookup
+            if "team1" in row and isinstance(row["team1"], str):
+                row["team1"] = row["team1"].lower()
+            if "team2" in row and isinstance(row["team2"], str):
+                row["team2"] = row["team2"].lower()
+
+            # build column list (JSON keys + insert_datetime)
+            columns = list(row.keys()) + ["insert_datetime"]
+            placeholders = ", ".join(["%s"] * len(columns))
+            columns_sql   = ", ".join(columns)
+            sql = f"""
+                INSERT INTO {table_name} ({columns_sql})
+                VALUES ({placeholders})
+                ON CONFLICT (team1, team2, game_time) DO NOTHING
+            """
+
+            values = []
+            for v in row.values():
+                if isinstance(v, (dict, list)):
+                    values.append(Json(v))
+                else:
+                    values.append(v)
+            values.append(now)
+
+            cur.execute(sql, values)
 
         conn.commit()
-        cursor.close()
-        conn.close()
+        print(f"Loaded {len(rows)} rows into {table_name}")
 
-        print("Data loaded successfully into PostgreSQL")
-
-    except Exception as e:
-        print(f"Failed to load data into PostgreSQL: {e}")
+    except Exception:
+        conn.rollback()
         raise
+
+    finally:
+        cur.close()
+        conn.close()
